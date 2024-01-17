@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 import { Button } from "@mui/material";
 
 const PDFGenerator = ({ data = [] }) => {
+  console.log("data", data);
   const generateData = (amount) => {
     var result = [];
     for (var i = 0; i < amount; i += 1) {
