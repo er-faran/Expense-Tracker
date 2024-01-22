@@ -9,15 +9,19 @@ import contactUsRouter from "./routes/contact.js";
 import expenseRouter from "./routes/expense.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/user", userRouter);
-app.use("/auth", authRouter);
-app.use("/contact-us", contactUsRouter);
-app.use("/expense", expenseRouter);
+app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/contact-us", contactUsRouter);
+app.use("/api/expense", expenseRouter);
+
+app.get("/", (req, res) =>
+  res.status(200).json({ message: "Application Running" })
+);
 
 mongoose
   .connect(process.env.MONGODB_URI)

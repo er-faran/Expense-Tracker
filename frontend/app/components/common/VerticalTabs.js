@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import PDFGenerator from "./PDFGenerator";
-
+import dayjs from "dayjs";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -41,18 +41,25 @@ function a11yProps(index) {
   };
 }
 
-const DownloadReportSection = ({ children, onDownload, onSendEmail }) => {
+const DownloadReportSection = ({
+  children,
+  onDownload,
+  onSendEmail,
+  timeSpan = "all",
+  data,
+}) => {
   return (
     <>
       <div className="text-black text-xl mb-5">{children}</div>
       <div className="flex gap-7">
-        <Button
+        {/* <Button
           className="bg-green-600 hover:bg-green-500"
           variant="contained"
           onClick={onDownload}
         >
           Download
-        </Button>
+        </Button> */}
+        <PDFGenerator data={data} />
         <Button variant="outlined" onClick={onSendEmail}>
           Send Email
         </Button>
@@ -61,11 +68,60 @@ const DownloadReportSection = ({ children, onDownload, onSendEmail }) => {
   );
 };
 
-export default function VerticalTabs() {
+export default function VerticalTabs({ data = [] }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleFilter = (filterType) => {
+    const currentDate = dayjs();
+    let filteredItems;
+
+    switch (filterType) {
+      case "today":
+        filteredItems = data?.filter((item) =>
+          dayjs(item.date, "MM/DD/YYYY").isSame(currentDate, "day")
+        );
+        break;
+
+      case "week":
+        const startOfWeek = currentDate.startOf("week");
+        const endOfWeek = currentDate.endOf("week");
+        filteredItems = data?.filter((item) =>
+          dayjs(item.date, "MM/DD/YYYY").isBetween(
+            startOfWeek,
+            endOfWeek,
+            null,
+            "[]"
+          )
+        );
+        break;
+
+      case "month":
+        const startOfMonth = currentDate.startOf("month");
+        const endOfMonth = currentDate.endOf("month");
+        filteredItems = data?.filter((item) =>
+          dayjs(item.date, "MM/DD/YYYY").isBetween(
+            startOfMonth,
+            endOfMonth,
+            null,
+            "[]"
+          )
+        );
+        break;
+
+      case "all":
+        filteredItems = data;
+        break;
+
+      default:
+        filteredItems = data;
+        break;
+    }
+    console.log("filteredItems", filterType, filteredItems);
+    return filteredItems;
   };
 
   return (
@@ -91,34 +147,12 @@ export default function VerticalTabs() {
         <Tab disabled={true} label="This Year's Report" {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <PDFGenerator
-          data={[
-            {
-              id: String(13),
-              expenseCategory: "Hobbies",
-              amount: String(30),
-              date: "01/30/2024",
-              time: "13:45",
-              comment: "Art Supplies",
-              isDeleted: false,
-            },
-            {
-              id: String(14),
-              expenseCategory: "Insurance",
-              amount: String(80),
-              date: "01/31/2024",
-              time: "14:30",
-              comment: "Car Insurance",
-              isDeleted: false,
-            },
-          ]}
-        />
-        <DownloadReportSection>
+        <DownloadReportSection timeSpan="today" data={handleFilter("today")}>
           Get Today's Expense Report
         </DownloadReportSection>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <DownloadReportSection>
+        <DownloadReportSection timeSpan="week" data={handleFilter("week")}>
           Get This Week's Expense Report
         </DownloadReportSection>
       </TabPanel>

@@ -1,0 +1,4 @@
+{
+  "GET_ALL_EXPENSE": "api/expense/get-all-expense",
+  "CREATE_EXPENSE": "api/expense/create-expense"
+}

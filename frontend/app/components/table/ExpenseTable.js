@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid";
 import NewRecord from "../popup/NewRecord";
 import { Chip } from "@mui/material";
+import { APIEndpoints } from "@/app/api/APIEndpoints";
+import { ToastContainer, toast } from "react-toastify";
 
 const ExpenseTable = () => {
   const [newRecordData, setNewRecordData] = useState({
@@ -17,13 +19,13 @@ const ExpenseTable = () => {
   const [filterBy, setFilterBy] = useState("today");
 
   const columns = [
-    { field: "id", headerName: "ID", width: 120 },
+    { field: "id", headerName: "ID", width: 150 },
     { field: "amount", headerName: "Amount", type: "number", width: 70 },
-    { field: "notes", headerName: "Notes", width: 150 },
+    { field: "notes", headerName: "Notes", width: 200 },
     {
       field: "expenseCategory",
       headerName: "Expense Category",
-      width: 130,
+      width: 150,
       valueGetter: (values) => {
         console.log("values", values);
         const dataToShow =
@@ -46,17 +48,7 @@ const ExpenseTable = () => {
     },
   ];
 
-  const [rows, setRows] = useState([
-    {
-      id: 0,
-      expenseCategory: [{ title: "Learning", id: 0 }],
-      amount: 100,
-      date: "01/18/2024",
-      time: "14:00",
-      notes: "Buy Udemy Course",
-      isDeleted: false,
-    },
-  ]);
+  const [rows, setRows] = useState([]);
 
   const [filteredData, setFilteredData] = useState(rows);
 
@@ -97,6 +89,10 @@ const ExpenseTable = () => {
         );
         break;
 
+      case "all":
+        filteredItems = rows;
+        break;
+
       default:
         filteredItems = rows;
         break;
@@ -105,21 +101,70 @@ const ExpenseTable = () => {
     setFilteredData(filteredItems);
   };
 
-  const handleSubmit = () => {
-    if (newRecordData?.id && newRecordData?.amount && newRecordData?.date) {
-      setRows([...rows, newRecordData]);
+  const getExpenseTableData = async () => {
+    const url = APIEndpoints?.getAllExpenseDataHandler();
+    try {
+      const resp = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (resp.status === 200) {
+        try {
+          const data = await resp.json();
+          setRows(data?.expenses);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
+      }
+    } catch (error) {
+      console.log("frontend error", error);
     }
   };
 
+  const handleSubmit = async () => {
+    const url = APIEndpoints?.createExpenseHandler();
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newRecordData),
+    });
+    if (resp.status === 201) {
+      try {
+        const data = await resp.json();
+        console.log("Ab Final", data);
+        toast(data?.message);
+        getExpenseTableData();
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+    }
+    console.log("frontend resp", resp);
+  };
+
   useEffect(() => {
-    console.log("rows", rows, filteredData);
     handleFilter(filterBy);
   }, [rows]);
+
+  useEffect(() => {
+    getExpenseTableData();
+  }, []);
 
   return (
     <div>
       <div className="flex justify-between items-center mb-2">
         <div className="flex gap-3">
+          <Chip
+            label="All"
+            variant={filterBy === "all" ? "filled" : "outlined"}
+            onClick={() => {
+              setFilterBy("all");
+              handleFilter("all");
+            }}
+          />
           <Chip
             label="Today"
             variant={filterBy === "today" ? "filled" : "outlined"}
@@ -152,6 +197,7 @@ const ExpenseTable = () => {
         />
       </div>
       <DataGrid
+        id="expense-table"
         rows={filteredData}
         columns={columns}
         initialState={{
@@ -161,6 +207,18 @@ const ExpenseTable = () => {
         }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </div>
   );

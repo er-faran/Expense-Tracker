@@ -1,13 +1,12 @@
 import ExpenseModal from "../models/expense.js";
-import bcrypt from "bcryptjs";
 
 export const getAllExpense = async (req, res) => {
   try {
     const allExpense = await ExpenseModal.find().select();
     if (!allExpense?.length > 0)
-      return res.status(404).json({ message: "No User Found" });
+      return res.status(404).json({ message: "No Expense Found" });
 
-    res.status(200).json({ result: allExpense });
+    res.status(200).json({ expenses: allExpense });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);
@@ -17,13 +16,11 @@ export const getAllExpense = async (req, res) => {
 export const addExpense = async (req, res) => {
   const { id, amount, expenseCategory, date, time, notes } = req.body;
   try {
-    const existExpense = await UserModal.findOne({ id });
+    const existExpense = await ExpenseModal.findOne({ id });
 
     if (existExpense) {
       return res.status(400).json({ message: "Expense already exists" });
     }
-
-    // const hashedPassword = await bcrypt.hash(password, 12);
 
     const result = await ExpenseModal.create({
       id,
@@ -33,11 +30,10 @@ export const addExpense = async (req, res) => {
       time,
       notes,
     });
-
-    // const token = jwt.sign({ email: result.email, id: result._id }, secret, {
-    //   expiresIn: "1h",
-    // });
-    res.status(201).json({ result });
+    res.status(201).json({
+      result,
+      message: "Expense Record has been created successfully",
+    });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);

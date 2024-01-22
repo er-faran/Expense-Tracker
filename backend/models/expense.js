@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = mongoose.Schema({
+const expenseSchema = mongoose.Schema({
   id: { type: String, required: true, unique: true },
   amount: { type: String, required: true },
   expenseCategory: { type: Array, require: true },
@@ -10,4 +10,4 @@ const userSchema = mongoose.Schema({
   isDeleted: { type: Boolean, require: true, default: false },
 });
 
-export default mongoose.model("Expense", userSchema);
+export default mongoose.model("Expense", expenseSchema);
