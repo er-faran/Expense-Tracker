@@ -6,8 +6,29 @@ const getAllExpenseDataHandler = () => {
 const createExpenseHandler = () => {
   return BASE_URL + apiJSONEndpoints.CREATE_EXPENSE;
 };
+const updateExpenseHandler = () => {
+  return BASE_URL + apiJSONEndpoints.UPDATE_EXPENSE;
+};
+const deleteExpenseHandler = (id) => {
+  return BASE_URL + apiJSONEndpoints.DELETE_EXPENSE + `/${id}`;
+};
+
+const getExpenseByCategoryHandler = (id) => {
+  return BASE_URL + apiJSONEndpoints.GET_EXPENSE_BY_CATEGORY;
+};
+const signinHandler = (id) => {
+  return BASE_URL + apiJSONEndpoints.SIGN_IN;
+};
+const signupHandler = (id) => {
+  return BASE_URL + apiJSONEndpoints.SIGN_UP;
+};
 
 export const APIEndpoints = {
   getAllExpenseDataHandler,
   createExpenseHandler,
+  updateExpenseHandler,
+  deleteExpenseHandler,
+  getExpenseByCategoryHandler,
+  signinHandler,
+  signupHandler,
 };

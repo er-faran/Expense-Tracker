@@ -14,13 +14,17 @@ export default function MultiSelectDropdown({
   onChange = () => {},
   id = "id",
   name = "name",
+  value = [],
+  disabled = false,
 }) {
   const handleOnChange = (event, selectedOptions) => {
     onChange(selectedOptions);
   };
   return (
     <Autocomplete
+      disabled={disabled}
       multiple
+      value={value}
       id={id}
       name={name}
       options={options}

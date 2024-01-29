@@ -1,4 +1,9 @@
 {
   "GET_ALL_EXPENSE": "api/expense/get-all-expense",
-  "CREATE_EXPENSE": "api/expense/create-expense"
+  "CREATE_EXPENSE": "api/expense/create-expense",
+  "UPDATE_EXPENSE": "api/expense/update-expense",
+  "DELETE_EXPENSE": "api/expense/delete-expense",
+  "GET_EXPENSE_BY_CATEGORY": "api/expense/money-by-category",
+  "SIGN_IN": "api/auth/signin",
+  "SIGN_UP": "api/auth/signup"
 }

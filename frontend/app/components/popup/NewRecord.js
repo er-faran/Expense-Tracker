@@ -10,59 +10,85 @@ import DialogTitle from "@mui/material/DialogTitle";
 import GeneralDateTimePicker from "../common/GeneralDateTimePicker";
 import MultiSelectDropdown from "../common/MultiSelectDropdown";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
+import GeneralSelect from "../common/GeneralSelect";
 
 export default function NewRecord({
   data = {},
   setData = () => {},
   handleSubmit = () => {},
+  openPopup = false,
+  setOpenPopup,
+  viewTransactionItem,
 }) {
-  const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(openPopup);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpenPopup(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenPopup(false);
   };
 
+  const [popupState, setPopupState] = React.useState("new"); //new, view, update
+
   React.useEffect(() => {
-    if (open) {
-      setData({ ...data, id: dayjs()?.valueOf() });
+    if (viewTransactionItem?.id && openPopup) {
+      setPopupState("view");
     }
-  }, [open]);
+    setData({
+      ...data,
+      id: viewTransactionItem?.id || data?.id || dayjs()?.valueOf(),
+    });
+  }, [openPopup, viewTransactionItem]);
 
   return (
     <React.Fragment>
-      <Button
-        variant="text"
-        onClick={handleClickOpen}
-        className="bg-blue-500 text-white font-medium hover:bg-blue-400"
-      >
-        New
-      </Button>
       <Dialog
-        open={open}
+        open={openPopup}
         onClose={handleClose}
         PaperProps={{
           component: "form",
           onSubmit: (event) => {
             event.preventDefault();
-            handleSubmit();
-            handleClose();
+            handleSubmit(popupState);
           },
         }}
       >
-        <DialogTitle>New Expense</DialogTitle>
+        <div className="flex justify-between items-center mr-5">
+          <DialogTitle className="!font-semibold !text-2xl">
+            {popupState === "update"
+              ? "Update Expense"
+              : popupState === "view"
+              ? "View Expense"
+              : "New Expense"}
+          </DialogTitle>
+          {popupState === "view" && (
+            <button
+              className="bg-primary-background text-primary-light text-xs px-3 py-2 rounded-md"
+              onClick={() => setPopupState("update")}
+            >
+              Update
+            </button>
+          )}
+        </div>
+
+        <hr />
         <DialogContent>
-          <DialogContentText>
-            Please fill all mandatory field(s) to add New Expense.
-          </DialogContentText>
+          {popupState !== "view" && (
+            <DialogContentText className="!text-xs">
+              {`Please fill all mandatory field(s) to ${
+                popupState === "update" ? "Update" : "Add New"
+              } Expense.`}
+            </DialogContentText>
+          )}
           <div>
             <label>
               Amount <span className="required-icon">*</span>
             </label>
             <TextField
+              disabled={popupState === "view"}
+              value={data?.amount}
               autoFocus
               required
               margin="dense"
@@ -72,13 +98,17 @@ export default function NewRecord({
               fullWidth
               className="m-0 p-0"
               onChange={(e) => setData({ ...data, amount: e.target.value })}
+              placeholder="100"
             />
           </div>
           <div>
             <label>
               Category <span className="required-icon">*</span>
             </label>
-            <MultiSelectDropdown
+            <GeneralSelect
+              placeholder="Learning"
+              disabled={popupState === "view"}
+              value={data?.expenseCategory || null}
               id="category"
               name="category"
               onChange={(items) => setData({ ...data, expenseCategory: items })}
@@ -100,8 +130,15 @@ export default function NewRecord({
               Date and Time <span className="required-icon">*</span>
             </label>
             <GeneralDateTimePicker
+              disabled={popupState === "view"}
+              value={data?.dateEvent}
               onChange={(item) =>
-                setData({ ...data, date: item?.date, time: item?.time })
+                setData({
+                  ...data,
+                  date: item?.date,
+                  time: item?.time,
+                  dateEvent: item?.dateEvent,
+                })
               }
               id="date-time"
               name="date-time"
@@ -110,6 +147,8 @@ export default function NewRecord({
           <div>
             <label>Notes</label>
             <BaseTextareaAutosize
+              disabled={popupState === "view"}
+              value={data?.notes}
               className="border w-full"
               minRows={4}
               placeholder="Type Here"
@@ -120,8 +159,24 @@ export default function NewRecord({
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <button
+            className="bg-transparent text-primary-background px-3 py-2 rounded-md"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-primary-background text-primary-light px-3 py-2 rounded-md"
+            type="submit"
+          >
+            {popupState === "view"
+              ? "Delete"
+              : popupState === "update"
+              ? "Update"
+              : "Create"}
+          </button>
+          {/* <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Create</Button> */}
         </DialogActions>
       </Dialog>
     </React.Fragment>
