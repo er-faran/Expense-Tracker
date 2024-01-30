@@ -32,9 +32,13 @@ const CommonDialog = ({
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpenLoacal}>
+      {/* <Button variant="outlined">{buttonLabel}</Button> */}
+      <button
+        className="bg-primary-background text-primary-light px-3 py-2 rounded-md"
+        onClick={handleClickOpenLoacal}
+      >
         {buttonLabel}
-      </Button>
+      </button>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}

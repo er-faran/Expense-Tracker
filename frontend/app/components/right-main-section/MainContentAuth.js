@@ -86,6 +86,16 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
     }
   };
 
+  useEffect(() => {
+    if (logoutSucess) {
+      setSelectedTabId("");
+      setTimeout(() => {
+        setSelectedTabId(5);
+        localStorage.setItem("user", null);
+      }, 0);
+    }
+  }, [logoutSucess]);
+
   return (
     <div className="flex flex-col gap-3">
       <h3 className="text-4xl font-semibold text-primary-background mb-3">
@@ -97,8 +107,8 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
       </h3>
       {flow === "logout" ? (
         <p>
-          Successfully logged out. Ensure your account's safety with a secure
-          logout. Feel free to log in again whenever you're ready.
+          Ensure your account's safety with a secure logout. Feel free to log in
+          again whenever you're ready.
         </p>
       ) : flow === "login" ? (
         <p>
@@ -184,15 +194,15 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
               />
               <button
                 type="submit"
-                className="bg-primary-background text-primary-light px-3 py-2 rounded-md w-full mt-2"
+                className="bg-primary-background text-primary-light px-3 py-2 rounded-md w-full mt-2 disabled:bg-slate-700"
+                disabled={submitRequestLoading}
               >
                 {flow === "login" ? "Sign In" : "Sign Up"}
               </button>
               <Grid container>
                 <Grid item>
                   <button
-                    disabled={submitRequestLoading}
-                    className="bg-transparent text-primary-background px-3 py-2 rounded-md disabled:bg-slate-500"
+                    className="bg-transparent text-primary-background px-3 py-2 rounded-md"
                     onClick={() =>
                       setFlow(flow === "login" ? "registration" : "login")
                     }
@@ -212,7 +222,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
           <div className="flex-1 p-28 flex flex-col gap-5 items-center">
             <p className="text-gray-600 text-4xl font-medium">
               <VerifiedUserIcon className="text-green-800 mb-1" fontSize="75" />{" "}
-              You have successfully Logged out!
+              You've been logged out successfully!
             </p>
             <div className="mt-6">
               <Button
@@ -226,10 +236,10 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
             </div>
           </div>
         ) : (
-          <div className="flex-1 p-28 flex flex-col gap-5 items-center">
+          <div className="">
             <CommonDialog
               title="Are you sure? You want to Logout"
-              dialogSubtitle=""
+              dialogSubtitle="Click Logout button to logout."
               buttonLabel="Logout"
               open={openLogoutDialog}
               setOpen={openLogoutDialog}
@@ -237,9 +247,10 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
               submitLabel="Logout"
               handleCancel={() => {
                 setLogoutSucess(false);
+                setOpenLogoutDialog(false);
               }}
               handelSubmit={() => {
-                localStorage.removeItem("user");
+                localStorage.setItem("user", null);
                 setLogoutSucess(true);
               }}
               handleClickOpen={() => {

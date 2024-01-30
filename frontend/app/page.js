@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "./components/header/Header";
 import ExpenseTable from "./components/table/ExpenseTable";
 import ExpenseReport from "./components/expense-report/ExpenseReport";
@@ -7,8 +7,8 @@ import LeftNavigation from "./components/left-navigation/LeftNavigation";
 import RightMainSection from "./components/right-main-section/RightMainSection";
 
 export default function Home() {
-  const userLoggedInDetails = JSON.parse(localStorage.getItem("user"));
   const selctedTabLocalData = Number(localStorage?.getItem("selectedTab")) || 0;
+  const userLoggedInDetails = JSON.parse(localStorage.getItem("user"));
   const [value, setValue] = useState(selctedTabLocalData);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState(null);
 
@@ -16,11 +16,12 @@ export default function Home() {
     if (userLoggedInDetails?.result?._id) {
       setLoggedInUserDetails(userLoggedInDetails);
     } else {
-      localStorage?.setItem("selectedTab", "5");
-      setValue(5);
+      localStorage.setItem("selectedTab", "5");
+      localStorage.setItem("user", null);
       setLoggedInUserDetails(null);
+      setValue(5);
     }
-  }, []);
+  }, [value]);
 
   return (
     <main className="min-h-screen p-10 flex text-primary-text bg-primary-background">
