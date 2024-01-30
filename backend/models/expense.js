@@ -9,6 +9,7 @@ const expenseSchema = mongoose.Schema({
   time: { type: String, required: true },
   dateEvent: { type: String, required: true },
   isDeleted: { type: Boolean, required: true, default: false },
+  userID: { type: String, required: true, unique: true },
 });
 
 export default mongoose.model("Expense", expenseSchema);

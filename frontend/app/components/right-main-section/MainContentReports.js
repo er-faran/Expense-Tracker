@@ -5,8 +5,9 @@ import React, { useEffect, useState } from "react";
 import PDFGenerator from "../common/PDFGenerator";
 import dayjs from "dayjs";
 import GeneralDateTimePicker from "../common/GeneralDateTimePicker";
+import { logoutHandler } from "../common/utils";
 
-const MainContentReports = () => {
+const MainContentReports = ({ setSelectedTabId }) => {
   const [rows, setRows] = useState([]);
   const [timeSpan, setTimeSpan] = useState("today");
   const [filteredData, setFilteredData] = useState(rows);
@@ -16,6 +17,8 @@ const MainContentReports = () => {
     endDate: dayjs().endOf("month"),
     dateEvent: dayjs(),
   });
+
+  const authorization = `${JSON?.parse(localStorage?.getItem("user"))?.token}`;
 
   const handleTimeSpan = (data) => {
     setTimeSpan(data);
@@ -107,6 +110,7 @@ const MainContentReports = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          authorization,
         },
       });
       if (resp.status === 200) {
@@ -119,6 +123,9 @@ const MainContentReports = () => {
         } catch (error) {
           console.error("Error parsing JSON:", error);
         }
+      } else if (resp.status === 401 || resp.status === 403) {
+        logoutHandler(setSelectedTabId(5));
+        console.log("frontend error", resp);
       }
     } catch (error) {
       console.log("frontend error", error);

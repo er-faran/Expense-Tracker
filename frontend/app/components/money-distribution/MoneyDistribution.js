@@ -4,17 +4,20 @@ import ProgressIndicator from "../common/ProgressIndicator";
 import { APIEndpoints } from "@/app/api/APIEndpoints";
 import sidePanelMoneyImg from "../../images/money.png";
 import Image from "next/image";
+import { logoutHandler } from "../common/utils";
 
 const MoneyDistribution = ({ apiTrigger }) => {
   const [expenseDistrubutionData, setExpenseDistrubutionData] = useState([]);
+  const authorization = `${JSON?.parse(localStorage?.getItem("user"))?.token}`;
+
   const getExpenseByCategory = async () => {
-    const url = APIEndpoints?.getExpenseByCategoryHandler();
-    console.log("frontend data", url);
     try {
+      const url = APIEndpoints?.getExpenseByCategoryHandler();
       const resp = await fetch(url, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          authorization,
         },
       });
       if (resp.status === 200) {
@@ -25,6 +28,9 @@ const MoneyDistribution = ({ apiTrigger }) => {
         } catch (error) {
           console.error("Error parsing JSON:", error);
         }
+      } else if (resp.status === 401 || resp.status === 403) {
+        logoutHandler();
+        console.log("frontend error", resp);
       }
     } catch (error) {
       console.log("frontend error", error);

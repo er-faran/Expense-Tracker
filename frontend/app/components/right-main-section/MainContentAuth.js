@@ -17,6 +17,7 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import { toast } from "react-toastify";
 import { APIEndpoints } from "@/app/api/APIEndpoints";
 import CommonDialog from "../common/CommonDialog";
+import { logoutHandler } from "../common/utils";
 
 const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
   const [flow, setFlow] = useState(loggedInUserDetails ? "logout" : "login");
@@ -78,6 +79,9 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
         } catch (error) {
           console.error("Error parsing JSON:", error);
         }
+      } else if (resp.status === 401 || resp.status === 403) {
+        logoutHandler();
+        console.log("frontend error", resp);
       }
     } catch (err) {
       console.log("frontend err", err);
@@ -238,8 +242,8 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
         ) : (
           <div className="">
             <CommonDialog
-              title="Are you sure? You want to Logout"
-              dialogSubtitle="Click Logout button to logout."
+              title="Confirm Logout"
+              dialogSubtitle="Are you sure you want to log out? Logging out will ensure the security of your account."
               buttonLabel="Logout"
               open={openLogoutDialog}
               setOpen={openLogoutDialog}

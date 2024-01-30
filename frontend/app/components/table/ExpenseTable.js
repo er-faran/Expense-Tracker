@@ -6,6 +6,7 @@ import NewRecord from "../popup/NewRecord";
 import { Chip } from "@mui/material";
 import { APIEndpoints } from "@/app/api/APIEndpoints";
 import { ToastContainer, toast } from "react-toastify";
+import { logoutHandler } from "../common/utils";
 
 const ExpenseTable = () => {
   const [newRecordData, setNewRecordData] = useState({
@@ -100,6 +101,7 @@ const ExpenseTable = () => {
 
     setFilteredData(filteredItems);
   };
+  const authorization = `${JSON?.parse(localStorage?.getItem("user"))?.token}`;
 
   const getExpenseTableData = async () => {
     const url = APIEndpoints?.getAllExpenseDataHandler();
@@ -108,6 +110,7 @@ const ExpenseTable = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          authorization,
         },
       });
       if (resp.status === 200) {
@@ -117,6 +120,9 @@ const ExpenseTable = () => {
         } catch (error) {
           console.error("Error parsing JSON:", error);
         }
+      } else if (resp.status === 401 || resp.status === 403) {
+        logoutHandler();
+        console.log("frontend error", resp);
       }
     } catch (error) {
       console.log("frontend error", error);
@@ -129,6 +135,7 @@ const ExpenseTable = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization,
       },
       body: JSON.stringify(newRecordData),
     });
@@ -141,6 +148,9 @@ const ExpenseTable = () => {
       } catch (error) {
         console.error("Error parsing JSON:", error);
       }
+    } else if (resp.status === 401 || resp.status === 403) {
+      logoutHandler();
+      console.log("frontend error", resp);
     }
     console.log("frontend resp", resp);
   };

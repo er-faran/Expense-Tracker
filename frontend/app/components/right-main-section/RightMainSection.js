@@ -26,9 +26,12 @@ const RightMainSection = ({
           <MainContent
             showNewTransactionForm={showNewTransactionForm}
             setShowNewTransactionForm={setShowNewTransactionForm}
+            setSelectedTabId={setSelectedTabId}
           />
         )}
-        {selectedTab == "2" && <MainContentReports />}
+        {selectedTab == "2" && (
+          <MainContentReports setSelectedTabId={setSelectedTabId} />
+        )}
         {selectedTab == "5" && (
           <MainContentAuth
             loggedInUserDetails={loggedInUserDetails}

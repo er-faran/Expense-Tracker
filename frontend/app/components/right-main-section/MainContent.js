@@ -5,13 +5,21 @@ import { APIEndpoints } from "@/app/api/APIEndpoints";
 import dayjs from "dayjs";
 import TransactionList from "../skeleton/TransactionList";
 import NewRecord from "../popup/NewRecord";
+import { toast } from "react-toastify";
+import { logoutHandler } from "../common/utils";
 
-const MainContent = ({ showNewTransactionForm, setShowNewTransactionForm }) => {
+const MainContent = ({
+  showNewTransactionForm,
+  setShowNewTransactionForm,
+  setSelectedTabId,
+}) => {
   const [rows, setRows] = useState([]);
 
   const [filteredData, setFilteredData] = useState(rows);
   const [timeSpan, setTimeSpan] = useState("today");
   const [tableDataFetching, setTableDataFetching] = useState(false);
+
+  const userID = JSON.parse(localStorage.getItem("user"))?.result?._id;
 
   // const [showNewTransactionForm, setShowNewTransactionForm] = useState(false);
   const defaultNewRecordData = {
@@ -24,6 +32,8 @@ const MainContent = ({ showNewTransactionForm, setShowNewTransactionForm }) => {
     dateEvent: null,
   };
   const [newRecordData, setNewRecordData] = useState(defaultNewRecordData);
+
+  const authorization = `${JSON?.parse(localStorage?.getItem("user"))?.token}`;
 
   const handleTimeSpan = (data) => {
     setTimeSpan(data);
@@ -86,6 +96,7 @@ const MainContent = ({ showNewTransactionForm, setShowNewTransactionForm }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          authorization,
         },
       });
       if (resp.status === 200) {
@@ -96,6 +107,9 @@ const MainContent = ({ showNewTransactionForm, setShowNewTransactionForm }) => {
         } catch (error) {
           console.error("Error parsing JSON:", error);
         }
+      } else if (resp.status === 401 || resp.status === 403) {
+        logoutHandler(setSelectedTabId(5));
+        console.log("frontend error", resp);
       }
     } catch (error) {
       console.log("frontend error", error);
@@ -107,6 +121,10 @@ const MainContent = ({ showNewTransactionForm, setShowNewTransactionForm }) => {
 
   const handleSubmit = async (popupState = "new") => {
     try {
+      if (!userID) {
+        toast.error("User Not Found");
+        return 0;
+      }
       const url =
         popupState === "update"
           ? APIEndpoints?.updateExpenseHandler()
@@ -124,8 +142,12 @@ const MainContent = ({ showNewTransactionForm, setShowNewTransactionForm }) => {
             : "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization,
         },
-        body: popupState === "view" ? null : JSON.stringify(newRecordData),
+        body:
+          popupState === "view"
+            ? null
+            : JSON.stringify({ ...newRecordData, userID }),
       });
       if (resp.status === 201 || resp.status === 200) {
         try {
@@ -136,6 +158,9 @@ const MainContent = ({ showNewTransactionForm, setShowNewTransactionForm }) => {
         } catch (error) {
           console.error("Error parsing JSON:", error);
         }
+      } else if (resp.status === 401 || resp.status === 403) {
+        logoutHandler(setSelectedTabId(5));
+        console.log("frontend error", resp);
       }
     } catch (err) {
       console.log("frontend err", err);
