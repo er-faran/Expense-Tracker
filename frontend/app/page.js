@@ -7,8 +7,12 @@ import LeftNavigation from "./components/left-navigation/LeftNavigation";
 import RightMainSection from "./components/right-main-section/RightMainSection";
 
 export default function Home() {
-  const selctedTabLocalData = Number(localStorage?.getItem("selectedTab")) || 0;
-  const userLoggedInDetails = JSON.parse(localStorage.getItem("user"));
+  let selctedTabLocalData = 5;
+  let userLoggedInDetails = null;
+  if (typeof window !== "undefined") {
+    selctedTabLocalData = Number(localStorage?.getItem("selectedTab")) || 0;
+    userLoggedInDetails = JSON.parse(localStorage.getItem("user"));
+  }
   const [value, setValue] = useState(selctedTabLocalData);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState(null);
 

@@ -8,7 +8,10 @@ import { logoutHandler } from "../common/utils";
 
 const MoneyDistribution = ({ apiTrigger }) => {
   const [expenseDistrubutionData, setExpenseDistrubutionData] = useState([]);
-  const authorization = `${JSON?.parse(localStorage?.getItem("user"))?.token}`;
+  let authorization = "";
+  if (typeof window !== "undefined") {
+    authorization = `${JSON?.parse(localStorage?.getItem("user"))?.token}`;
+  }
 
   const getExpenseByCategory = async () => {
     try {

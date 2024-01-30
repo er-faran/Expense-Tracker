@@ -24,13 +24,13 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [logoutSucess, setLogoutSucess] = useState(false);
   const loginFormInitialData = {
-    email: null,
-    password: null,
+    email: "",
+    password: "",
   };
   const registerFormInitialData = {
-    name: null,
-    email: null,
-    password: null,
+    name: "",
+    email: "",
+    password: "",
   };
 
   useEffect(() => {
