@@ -1,8 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import Header from "./components/header/Header";
-import ExpenseTable from "./components/table/ExpenseTable";
-import ExpenseReport from "./components/expense-report/ExpenseReport";
+import { useEffect, useState } from "react";
 import LeftNavigation from "./components/left-navigation/LeftNavigation";
 import RightMainSection from "./components/right-main-section/RightMainSection";
 
@@ -28,16 +25,16 @@ export default function Home() {
   }, [value]);
 
   return (
-    <main className="min-h-screen p-10 flex text-primary-text bg-primary-background">
-      <div className="flex flex-wrap gap-9 min-h-full flex-1">
-        <div className="h-full">
+    <main className="h-fit md:min-h-screen p-10 flex text-primary-text bg-primary-background">
+      <div className="flex flex-col md:flex-row gap-9 min-h-full flex-1">
+        <div className="md:h-full w-full md:w-1/4">
           <LeftNavigation
             value={value}
             setValue={setValue}
             loggedInUserDetails={loggedInUserDetails}
           />
         </div>
-        <div className="h-full flex-1">
+        <div className="flex-1">
           <RightMainSection
             setSelectedTabId={setValue}
             selectedTabId={value}

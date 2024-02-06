@@ -41,7 +41,7 @@ const CommonDialog = ({
       </button>
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => handleCloseLocal("cancel")}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >

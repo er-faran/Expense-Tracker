@@ -106,6 +106,7 @@ export default function NewRecord({
               Category <span className="required-icon">*</span>
             </label>
             <GeneralSelect
+              className="!w-full m-0 p-0"
               placeholder="Learning"
               disabled={popupState === "view"}
               value={data?.expenseCategory || null}

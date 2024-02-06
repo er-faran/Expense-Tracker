@@ -11,6 +11,7 @@ export default function GeneralSelect({
   value = null,
   disabled = false,
   placeholder = "Select",
+  className = "",
 }) {
   const handleOnChange = (event, selectedOption) => {
     onChange(selectedOption);
@@ -32,7 +33,7 @@ export default function GeneralSelect({
       renderInput={(params) => (
         <TextField {...params} placeholder={placeholder} />
       )}
-      className="m-0 p-0"
+      className={className}
       onChange={handleOnChange}
     />
   );

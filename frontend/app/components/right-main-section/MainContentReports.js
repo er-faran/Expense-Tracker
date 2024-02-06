@@ -92,9 +92,7 @@ const MainContentReports = ({ setSelectedTabId }) => {
       ...filteredItems.map((item) => {
         return {
           ...item,
-          expenseCategory: item?.expenseCategory
-            ?.map((item) => item?.title)
-            .join(", "),
+          expenseCategory: item?.expenseCategory?.title,
         };
       }),
     ];
@@ -145,7 +143,7 @@ const MainContentReports = ({ setSelectedTabId }) => {
 
   return (
     <div>
-      <div className="">
+      <div className="reports-container">
         <h3 className="text-4xl font-semibold text-primary-background mb-3">
           Reports
         </h3>

@@ -64,8 +64,8 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
         try {
           const data = await resp.json();
           localStorage.setItem("user", JSON.stringify(data));
-          console.log("API Resp", data);
-          toast(data?.message);
+          console.log("API Resp", data, resp);
+          toast.success(data?.message);
           if (flow === "login") {
             setFormDetails(registerFormInitialData);
             localStorage?.setItem("selectedTab", "1");
@@ -78,13 +78,22 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
           }
         } catch (error) {
           console.error("Error parsing JSON:", error);
+          toast.error("Something went wrong, Please try again later.");
         }
       } else if (resp.status === 401 || resp.status === 403) {
         logoutHandler();
         console.log("frontend error", resp);
+        toast.error("You are not authorized");
+      } else if (resp.status === 404) {
+        console.log("frontend error", resp);
+        toast.error("User does not exist.");
+      } else {
+        console.log("frontend error", resp);
+        toast.error("Oops, Somthing went wrong. Please try again later.");
       }
     } catch (err) {
       console.log("frontend err", err);
+      toast.error("Something went wrong, Please try again later.");
     } finally {
       setSubmitRequestLoading(false);
     }
@@ -96,6 +105,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
       setTimeout(() => {
         setSelectedTabId(5);
         localStorage.setItem("user", null);
+        toast.info("You have signed out successfully.");
       }, 0);
     }
   }, [logoutSucess]);
@@ -111,17 +121,17 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
       </h3>
       {flow === "logout" ? (
         <p>
-          Ensure your account's safety with a secure logout. Feel free to log in
-          again whenever you're ready.
+          Ensure your account's safety with a secure logout. Feel free to sign
+          in again whenever you're ready.
         </p>
       ) : flow === "login" ? (
         <p>
-          Securely access your account. Experience hassle-free login with
+          Securely access your account. Experience hassle-free sign in with
           advanced security features for a seamless and protected user journey.
         </p>
       ) : (
         <p>
-          Unlock a world of possibilities! Register now for exclusive benefits
+          Unlock a world of possibilities! Sign up now for exclusive benefits
           and personalized features. Your journey to an enhanced experience
           starts here.
         </p>
@@ -226,7 +236,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
           <div className="flex-1 p-28 flex flex-col gap-5 items-center">
             <p className="text-gray-600 text-4xl font-medium">
               <VerifiedUserIcon className="text-green-800 mb-1" fontSize="75" />{" "}
-              You've been logged out successfully!
+              You've been signed out successfully!
             </p>
             <div className="mt-6">
               <Button
@@ -235,20 +245,20 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
                 startIcon={<ExitToAppIcon />}
                 onClick={() => setFlow("login")}
               >
-                Log In Again
+                Sign In Again
               </Button>
             </div>
           </div>
         ) : (
           <div className="">
             <CommonDialog
-              title="Confirm Logout"
-              dialogSubtitle="Are you sure you want to log out? Logging out will ensure the security of your account."
-              buttonLabel="Logout"
+              title="Confirm Sign out"
+              dialogSubtitle="Are you sure you want to sign out? signing out will ensure the security of your account."
+              buttonLabel="Sign out"
               open={openLogoutDialog}
               setOpen={openLogoutDialog}
               cancelLabel="Cancel"
-              submitLabel="Logout"
+              submitLabel="Sign out"
               handleCancel={() => {
                 setLogoutSucess(false);
                 setOpenLogoutDialog(false);

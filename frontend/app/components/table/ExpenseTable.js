@@ -5,7 +5,6 @@ import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid";
 import NewRecord from "../popup/NewRecord";
 import { Chip } from "@mui/material";
 import { APIEndpoints } from "@/app/api/APIEndpoints";
-import { ToastContainer, toast } from "react-toastify";
 import { logoutHandler } from "../common/utils";
 
 const ExpenseTable = () => {
@@ -217,18 +216,6 @@ const ExpenseTable = () => {
         }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
-      />
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
       />
     </div>
   );
