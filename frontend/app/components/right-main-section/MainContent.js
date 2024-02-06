@@ -149,21 +149,23 @@ const MainContent = ({
             ? null
             : JSON.stringify({ ...newRecordData, userID }),
       });
-      if (resp.status === 201 || resp.status === 200) {
-        try {
-          const data = await resp.json();
-          console.log("Ab Final", popupState, data);
-          toast(data?.message);
-          getExpenseTableData();
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-        }
+      const data = await resp.json();
+      console.log("Resp =>", data);
+      if (data.status === 201 || data.status === 200) {
+        console.log("Ab Final", popupState, data);
+        toast.success(data?.message);
+        getExpenseTableData();
       } else if (resp.status === 401 || resp.status === 403) {
+        toast.info("Session Expired");
         logoutHandler(setSelectedTabId(5));
+        console.log("frontend error", resp);
+      } else {
+        toast.error("Oops, Something went wrong! Please try again later.");
         console.log("frontend error", resp);
       }
     } catch (err) {
       console.log("frontend err", err);
+      toast.error("Oops, Somthing went wrong, please try again later.");
     } finally {
       setShowNewTransactionForm(false);
     }
@@ -194,7 +196,7 @@ const MainContent = ({
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center">
         <h3 className="text-4xl font-semibold text-primary-background mb-3">
           Expenses
         </h3>

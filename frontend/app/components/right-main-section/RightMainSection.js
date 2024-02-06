@@ -20,8 +20,8 @@ const RightMainSection = ({
   console.log(selectedTab, selectedTab === "1");
 
   return (
-    <div className="flex flex-wrap bg-primary-light rounded-2xl min-h-full">
-      <div className="flex-auto w-72 p-10">
+    <div className="flex flex-col sm:flex-row bg-primary-light rounded-2xl min-h-full">
+      <div className="flex-1 p-10 pr-3">
         {selectedTab == "1" && (
           <MainContent
             showNewTransactionForm={showNewTransactionForm}
@@ -40,7 +40,7 @@ const RightMainSection = ({
         )}
       </div>
       {selectedTab !== "0" && selectedTab !== "5" && (
-        <div className="flex-auto w-28 bg-secondary-light p-10 rounded-r-2xl">
+        <div className="min-w-[35%] bg-secondary-light p-5 rounded-2xl md:rounded-r-2xl h-fit md:h-auto xs:w-full md:w-auto">
           <MoneyDistribution apiTrigger={showNewTransactionForm} />
         </div>
       )}

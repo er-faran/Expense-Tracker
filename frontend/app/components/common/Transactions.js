@@ -47,7 +47,7 @@ const Transactions = ({
       </div>
       <hr />
       <div
-        className={`mt-5 md:max-h-96 overflow-auto scrollbar ${
+        className={`mt-5 max-h-96 overflow-auto scrollbar ${
           DATA_SHOW_ON_SHORT_VIEW < dataToShow?.length && !shortView && "pr-3"
         }`}
       >

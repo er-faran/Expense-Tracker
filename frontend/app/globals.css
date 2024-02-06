@@ -43,6 +43,12 @@ label,
   padding: 0;
 }
 
+#side-navbar .MuiTabs-indicator {
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
+
 #time-span-select ~ fieldset {
   border: none !important;
 }
@@ -57,6 +63,21 @@ label,
 #side-navigation-tabs .Mui-selected {
   color: #fff !important;
 }
+
+.reports-container fieldset {
+  border: 0;
+}
+
+.side-nav-tabs-continer .MuiTabs-flexContainerVertical {
+  @media only screen and (max-width: 767px) {
+    flex-direction: row;
+  }
+}
+.money-container {
+  @media only screen and (min-width: 767px) and (max-width: 1000px) {
+    display: none;
+  }
+}
 .expense-category-label {
   padding: 5px 7px;
   background-color: #101010;
@@ -64,32 +85,39 @@ label,
   border-radius: 10px;
   font-size: x-small;
 }
+
 .learning {
-  background-color: blue;
+  background-color: #4caf50;
 }
 .food {
-  background-color: green;
+  background-color: #ffc107;
 }
 .cloth {
-  background-color: yellow;
+  background-color: #2196f3;
 }
 .family {
-  background-color: blueviolet;
+  background-color: #ff5722;
 }
 .gadgets {
-  background-color: burlywood;
+  background-color: #deb887;
 }
 .home {
-  background-color: skyblue;
+  background-color: #ff9800;
 }
 .charity {
-  background-color: purple;
+  background-color: #e91e63;
 }
 .travel {
-  background-color: maroon;
+  background-color: #607d8b;
 }
 .other {
-  background-color: red;
+  background-color: #9e9e9e;
+}
+.Toastify__toast {
+  width: 650px;
+  right: auto;
+  left: auto;
+  min-width: 350px;
 }
 
 @layer utilities {

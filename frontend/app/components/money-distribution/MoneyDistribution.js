@@ -45,7 +45,7 @@ const MoneyDistribution = ({ apiTrigger }) => {
   }, [apiTrigger]);
 
   return (
-    <div className="relative h-full">
+    <div className="md:relative w-full md:h-full">
       <div>
         <h3 className="text-primary-background font-semibold text-xl">
           Where your money go?
@@ -66,7 +66,7 @@ const MoneyDistribution = ({ apiTrigger }) => {
           )}
         </div>
       </div>
-      <div className="absolute bottom-0 w-full">
+      <div className="md:absolute bottom-0 w-full mt-36 md:mt-0 money-container">
         <div className="bg-secondary-lighter rounded-lg p-5 w-full relative">
           <Image
             className="-top-10 left-3 absolute"
