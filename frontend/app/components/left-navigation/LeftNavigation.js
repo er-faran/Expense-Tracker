@@ -16,7 +16,7 @@ const LeftNavigation = ({ value, setValue, loggedInUserDetails }) => {
   }
   return (
     <>
-      <h1 className="text-white text-4xl mb-5">Expense Tracker</h1>
+      <h1 className="text-white text-3xl md:text-4xl mb-5">Expense Tracker</h1>
       <div className="text-secondary-light text-xl">
         {loggedInUserDetails?.result?.name}
       </div>
