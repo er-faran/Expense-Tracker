@@ -6,6 +6,7 @@ import NewRecord from "../popup/NewRecord";
 import { Chip } from "@mui/material";
 import { APIEndpoints } from "@/app/api/APIEndpoints";
 import { logoutHandler } from "../common/utils";
+import ToastMessage from "../common/ToastMessage";
 
 const ExpenseTable = () => {
   const [newRecordData, setNewRecordData] = useState({
@@ -142,7 +143,13 @@ const ExpenseTable = () => {
       try {
         const data = await resp.json();
         console.log("Ab Final", data);
-        toast(data?.message);
+        toast(
+          <ToastMessage
+            // title="Error!"
+            subTitle={data?.message}
+            type="success"
+          />
+        );
         getExpenseTableData();
       } catch (error) {
         console.error("Error parsing JSON:", error);

@@ -21,7 +21,7 @@ const RightMainSection = ({
 
   return (
     <div className="flex flex-col sm:flex-row bg-primary-light rounded-2xl min-h-full">
-      <div className="flex-1 p-10 pr-3">
+      <div className="flex-1 p-5 md:p-10 md:pr-3">
         {selectedTab == "1" && (
           <MainContent
             showNewTransactionForm={showNewTransactionForm}

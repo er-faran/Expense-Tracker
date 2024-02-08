@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { APIEndpoints } from "@/app/api/APIEndpoints";
 import CommonDialog from "../common/CommonDialog";
 import { logoutHandler } from "../common/utils";
+import ToastMessage from "../common/ToastMessage";
 
 const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
   const [flow, setFlow] = useState(loggedInUserDetails ? "logout" : "login");
@@ -65,7 +66,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
           const data = await resp.json();
           localStorage.setItem("user", JSON.stringify(data));
           console.log("API Resp", data, resp);
-          toast.success(data?.message);
+          toast.success(<ToastMessage title={data?.message} type="success" />);
           if (flow === "login") {
             setFormDetails(registerFormInitialData);
             localStorage?.setItem("selectedTab", "1");
@@ -78,22 +79,52 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
           }
         } catch (error) {
           console.error("Error parsing JSON:", error);
-          toast.error("Something went wrong, Please try again later.");
+          toast.error(
+            <ToastMessage
+              title="Error!"
+              subTitle="Something went wrong, Please try again later."
+              type="error"
+            />
+          );
         }
       } else if (resp.status === 401 || resp.status === 403) {
         logoutHandler();
         console.log("frontend error", resp);
-        toast.error("You are not authorized");
+        toast.error(
+          <ToastMessage
+            title="Error!"
+            subTitle="You are not authorized."
+            type="error"
+          />
+        );
       } else if (resp.status === 404) {
         console.log("frontend error", resp);
-        toast.error("User does not exist.");
+        toast.error(
+          <ToastMessage
+            title="Error!"
+            subTitle="User does not exist."
+            type="error"
+          />
+        );
       } else {
         console.log("frontend error", resp);
-        toast.error("Oops, Somthing went wrong. Please try again later.");
+        toast.error(
+          <ToastMessage
+            title="Error!"
+            subTitle="Oops, Somthing went wrong. Please try again later."
+            type="error"
+          />
+        );
       }
     } catch (err) {
       console.log("frontend err", err);
-      toast.error("Something went wrong, Please try again later.");
+      toast.error(
+        <ToastMessage
+          title="Error!"
+          subTitle="Oops, Somthing went wrong. Please try again later."
+          type="error"
+        />
+      );
     } finally {
       setSubmitRequestLoading(false);
     }
@@ -105,14 +136,19 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
       setTimeout(() => {
         setSelectedTabId(5);
         localStorage.setItem("user", null);
-        toast.info("You have signed out successfully.");
+        toast.success(
+          <ToastMessage
+            title="You have signed out successfully."
+            type="success"
+          />
+        );
       }, 0);
     }
   }, [logoutSucess]);
 
   return (
     <div className="flex flex-col gap-3">
-      <h3 className="text-4xl font-semibold text-primary-background mb-3">
+      <h3 className="text-3xl md:text-4xl font-semibold text-primary-background mb-3">
         {flow === "logout"
           ? "Sign Out"
           : flow === "login"
@@ -149,7 +185,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               {flow === "login" ? <LockOutlinedIcon /> : <SecurityIcon />}
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component="h5" variant="h5">
               Sign in
             </Typography>
             <Box
@@ -170,7 +206,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
                   id="name"
                   label="Full Name"
                   name="name"
-                  autoComplete="name"
+                  // autoComplete="name"
                   autoFocus
                   value={formDetails?.name}
                   onChange={(e) =>
@@ -185,7 +221,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
+                // autoComplete="email"
                 autoFocus
                 value={formDetails?.email}
                 onChange={(e) =>
@@ -200,7 +236,7 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                // autoComplete="current-password"
                 value={formDetails?.password}
                 onChange={(e) =>
                   setFormDetails({ ...formDetails, password: e?.target?.value })
@@ -216,7 +252,9 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
               <Grid container>
                 <Grid item>
                   <button
-                    className="bg-transparent text-primary-background px-3 py-2 rounded-md"
+                    type="button"
+                    disabled={submitRequestLoading}
+                    className="bg-transparent text-primary-background px-3 py-2 rounded-md text-sm"
                     onClick={() =>
                       setFlow(flow === "login" ? "registration" : "login")
                     }

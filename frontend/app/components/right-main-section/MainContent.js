@@ -7,6 +7,7 @@ import TransactionList from "../skeleton/TransactionList";
 import NewRecord from "../popup/NewRecord";
 import { toast } from "react-toastify";
 import { logoutHandler } from "../common/utils";
+import ToastMessage from "../common/ToastMessage";
 
 const MainContent = ({
   showNewTransactionForm,
@@ -122,7 +123,13 @@ const MainContent = ({
   const handleSubmit = async (popupState = "new") => {
     try {
       if (!userID) {
-        toast.error("User Not Found");
+        toast.error(
+          <ToastMessage
+            title="Error!"
+            subTitle="User Not Found."
+            type="error"
+          />
+        );
         return 0;
       }
       const url =
@@ -153,19 +160,31 @@ const MainContent = ({
       console.log("Resp =>", data);
       if (data.status === 201 || data.status === 200) {
         console.log("Ab Final", popupState, data);
-        toast.success(data?.message);
+        toast.error(<ToastMessage title={data?.message} type="error" />);
         getExpenseTableData();
       } else if (resp.status === 401 || resp.status === 403) {
-        toast.info("Session Expired");
+        toast.info(<ToastMessage title="Session Expired" type="info" />);
         logoutHandler(setSelectedTabId(5));
         console.log("frontend error", resp);
       } else {
-        toast.error("Oops, Something went wrong! Please try again later.");
+        toast.error(
+          <ToastMessage
+            title="Error!"
+            subTitle="Oops, Something went wrong! Please try again later."
+            type="error"
+          />
+        );
         console.log("frontend error", resp);
       }
     } catch (err) {
       console.log("frontend err", err);
-      toast.error("Oops, Somthing went wrong, please try again later.");
+      toast.error(
+        <ToastMessage
+          title="Error!"
+          subTitle="Oops, Something went wrong! Please try again later."
+          type="error"
+        />
+      );
     } finally {
       setShowNewTransactionForm(false);
     }
