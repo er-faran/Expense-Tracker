@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { Tab, Tabs } from "@mui/material";
+import Image from "next/image";
+import logo from "../../images/logo.png";
 
 const LeftNavigation = ({ value, setValue, loggedInUserDetails }) => {
   const handleChange = (event, newValue) => {
@@ -16,7 +18,10 @@ const LeftNavigation = ({ value, setValue, loggedInUserDetails }) => {
   }
   return (
     <>
-      <h1 className="text-white text-3xl md:text-4xl mb-5">Expense Tracker</h1>
+      <div className="flex flex-wrap items-center justify-center gap-3 font-mono">
+        <Image src={logo} width={65} height={65} />
+        <h1 className="text-white text-2xl  mb-5">Your Expense Tracker</h1>
+      </div>
       <div className="text-secondary-light text-xl">
         {loggedInUserDetails?.result?.name}
       </div>
