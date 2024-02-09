@@ -70,7 +70,7 @@ label,
 
 .side-nav-tabs-continer .MuiTabs-flexContainerVertical {
   @media only screen and (max-width: 767px) {
-    flex-direction: row;
+    flex-direction: row !important;
   }
 }
 .money-container {
