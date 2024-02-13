@@ -272,10 +272,10 @@ const MainContentAuth = ({ loggedInUserDetails = null, setSelectedTabId }) => {
       {flow === "logout" &&
         (logoutSucess ? (
           <div className="flex-1 p-28 flex flex-col gap-5 items-center">
-            <p className="text-gray-600 text-4xl font-medium">
+            <div className="text-gray-600 text-4xl font-medium">
               <VerifiedUserIcon className="text-green-800 mb-1" fontSize="75" />{" "}
               You've been signed out successfully!
-            </p>
+            </div>
             <div className="mt-6">
               <Button
                 variant="outlined"
