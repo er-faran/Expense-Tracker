@@ -25,7 +25,7 @@ export default function Home() {
   }, [value]);
 
   return (
-    <main className="h-fit md:min-h-screen p-5 md:p-10 flex text-primary-text bg-primary-background">
+    <main className="h-fit min-h-screen p-5 md:p-10 flex text-primary-text bg-primary-background">
       <div className="flex flex-col md:flex-row gap-9 min-h-full flex-1 w-full">
         <div className="md:h-full w-full md:w-1/4">
           <LeftNavigation

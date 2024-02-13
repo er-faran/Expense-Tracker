@@ -12,7 +12,13 @@ const LeftNavigation = ({ value, setValue, loggedInUserDetails }) => {
   return (
     <>
       <div className="flex flex-wrap items-center justify-center gap-3 font-mono">
-        <Image alt="Expense Tracker" src={logo} width={65} height={65} />
+        <Image
+          alt="Expense Tracker"
+          src={logo}
+          width={65}
+          height={65}
+          className="mix-blend-lighten"
+        />
         <h1 className="text-white text-2xl  mb-5">Your Expense Tracker</h1>
       </div>
       <div className="text-secondary-light text-xl">
