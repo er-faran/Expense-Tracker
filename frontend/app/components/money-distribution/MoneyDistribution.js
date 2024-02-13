@@ -71,6 +71,7 @@ const MoneyDistribution = ({ apiTrigger }) => {
           <Image
             className="-top-10 left-3 absolute"
             src={sidePanelMoneyImg}
+            alt="Save More Money"
             width="130"
             heigth="100"
           />
