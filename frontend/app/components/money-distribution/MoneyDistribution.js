@@ -85,7 +85,10 @@ const MoneyDistribution = ({ apiTrigger }) => {
             </p>
             <button
               className="bg-primary-background text-primary-light px-3 py-2 rounded-md text-sm w-full mt-5"
-              onClick={() => {}}
+              onClick={() => {
+                if (window && window?.open)
+                  open("https://www.youtube.com/watch?v=Jmam0TyHQc4", "_blank");
+              }}
             >
               VIEW TIPS
             </button>
