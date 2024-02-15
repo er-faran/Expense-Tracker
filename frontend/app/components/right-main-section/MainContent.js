@@ -160,7 +160,7 @@ const MainContent = ({
       console.log("Resp =>", data);
       if (data.status === 201 || data.status === 200) {
         console.log("Ab Final", popupState, data);
-        toast.error(<ToastMessage title={data?.message} type="error" />);
+        toast.success(<ToastMessage title={data?.message} type="success" />);
         getExpenseTableData();
       } else if (resp.status === 401 || resp.status === 403) {
         toast.info(<ToastMessage title="Session Expired" type="info" />);

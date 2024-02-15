@@ -143,13 +143,7 @@ const ExpenseTable = () => {
       try {
         const data = await resp.json();
         console.log("Ab Final", data);
-        toast(
-          <ToastMessage
-            // title="Error!"
-            subTitle={data?.message}
-            type="success"
-          />
-        );
+        toast.success(<ToastMessage subTitle={data?.message} type="success" />);
         getExpenseTableData();
       } catch (error) {
         console.error("Error parsing JSON:", error);

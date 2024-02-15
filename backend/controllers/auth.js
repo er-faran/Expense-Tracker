@@ -22,13 +22,11 @@ export const register = async (req, res) => {
       name,
     });
 
-    res
-      .status(201)
-      .json({
-        result,
-        message: "You have signed up successfully",
-        status: 201,
-      });
+    res.status(201).json({
+      result,
+      message: "You have signed up successfully",
+      status: 201,
+    });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong", status: 500 });
     console.log(error);
@@ -63,7 +61,7 @@ export const login = async (req, res) => {
     res.status(200).json({
       result: oldUser,
       token,
-      message: "You have signed successfully.",
+      message: "You have signed in successfully.",
       status: 200,
     });
   } catch (error) {
